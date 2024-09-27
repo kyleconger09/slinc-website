@@ -138,17 +138,17 @@
                             <div class="bg-light p-5 rounded h-100 wow fadeInUp" data-wow-delay="0.2s">
                                 <h4 class="text-primary mb-4">Send Your Message</h4>
                                 <!-- <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a class="text-primary fw-bold" href="https://htmlcodex.com/contact-form">Download Now</a>.</p> -->
-                                <form>
+                                <form onsubmit="sendEmail(event)">
                                     <div class="row g-4">
                                         <div class="col-lg-12 col-xl-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="name" placeholder="Your Name">
+                                                <input type="text" class="form-control border-0" id="name" placeholder="Your Name" required>
                                                 <label for="name">Your Name</label>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-xl-6">
                                             <div class="form-floating">
-                                                <input type="email" class="form-control border-0" id="email" placeholder="Your Email">
+                                                <input type="email" class="form-control border-0" id="email" placeholder="Your Email" required>
                                                 <label for="email">Your Email</label>
                                             </div>
                                         </div>
@@ -166,7 +166,7 @@
                                         </div> -->
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="subject" placeholder="Subject">
+                                                <input type="text" class="form-control border-0" id="subject" placeholder="Subject" required>
                                                 <label for="subject">Subject</label>
                                             </div>
                                         </div>
@@ -178,7 +178,7 @@
 
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100 py-3">Send Message</button>
+                                            <button type="submit" class="btn btn-primary w-100 py-3">Send Message</button>
                                         </div>
                                     </div>
                                 </form>
@@ -316,6 +316,43 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
+
+        <script>
+            function sendEmail(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+                
+                // Gather form data
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+    
+                // Send email using SMTP.js
+                Email.send({
+                    Host: "smtp.titan.com", // Replace with your SMTP server
+                    Username: "dchen3176@gmail.com", // Your email address
+                    Password: "Passion@5116!", // Your email password
+                    To: 'dchen@solutionlinklogic.com', // Replace with the recipient's email
+                    From: email, // Your email address
+                    Subject: subject,
+                    Body: `<h3>New message from ${name}</h3>
+                           <p><strong>Email:</strong> ${email}</p>
+                           <p><strong>Message:</strong></p>
+                           <p>${message}</p>`
+                }).then(
+                    message => alert("Email sent successfully!")
+                ).catch(
+                    error => alert("Failed to send email: " + error)
+                );
+
+                // Init form
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('subject').value = '';
+                document.getElementById('message').value = '';
+            }
+        </script>
     </body>
 
 </html>
